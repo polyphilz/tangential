@@ -104,7 +104,7 @@ pub fn update_tree(state: State<Arc<AppState>>, id: String, input: UpdateTree) -
     // Check if tree exists and is not deleted
     let existing = get_tree_by_id(&conn, &id)?;
     if existing.deleted_at.is_some() {
-        return Err(AppError::NotFound(format!("Tree {} is deleted", id)));
+        return Err(AppError::NotFound(format!("Tree {id} is deleted")));
     }
 
     // Build dynamic update query
@@ -131,7 +131,8 @@ pub fn update_tree(state: State<Arc<AppState>>, id: String, input: UpdateTree) -
     );
     params.push(Box::new(id.clone()));
 
-    let params_refs: Vec<&dyn rusqlite::ToSql> = params.iter().map(|p| p.as_ref()).collect();
+    let params_refs: Vec<&dyn rusqlite::ToSql> =
+        params.iter().map(std::convert::AsRef::as_ref).collect();
     conn.execute(&query, params_refs.as_slice())?;
 
     get_tree_by_id(&conn, &id)
@@ -148,7 +149,7 @@ pub fn delete_tree(state: State<Arc<AppState>>, id: String) -> Result<Tree> {
     )?;
 
     if rows_affected == 0 {
-        return Err(AppError::NotFound(format!("Tree {} not found", id)));
+        return Err(AppError::NotFound(format!("Tree {id} not found")));
     }
 
     get_tree_by_id(&conn, &id)
@@ -165,7 +166,7 @@ pub fn restore_tree(state: State<Arc<AppState>>, id: String) -> Result<Tree> {
     )?;
 
     if rows_affected == 0 {
-        return Err(AppError::NotFound(format!("Deleted tree {} not found", id)));
+        return Err(AppError::NotFound(format!("Deleted tree {id} not found")));
     }
 
     get_tree_by_id(&conn, &id)
@@ -180,7 +181,7 @@ pub fn permanently_delete_tree(state: State<Arc<AppState>>, id: String) -> Resul
     let rows_affected = conn.execute("DELETE FROM trees WHERE id = ?1", (&id,))?;
 
     if rows_affected == 0 {
-        return Err(AppError::NotFound(format!("Tree {} not found", id)));
+        return Err(AppError::NotFound(format!("Tree {id} not found")));
     }
 
     Ok(())
@@ -210,7 +211,7 @@ fn get_tree_by_id(
         map_tree,
     )
     .map_err(|e| match e {
-        rusqlite::Error::QueryReturnedNoRows => AppError::NotFound(format!("Tree {} not found", id)),
+        rusqlite::Error::QueryReturnedNoRows => AppError::NotFound(format!("Tree {id} not found")),
         _ => AppError::Database(e),
     })
 }

@@ -23,7 +23,7 @@ pub fn get_setting(state: State<Arc<AppState>>, key: String) -> Result<Setting> 
     )
     .map_err(|e| match e {
         rusqlite::Error::QueryReturnedNoRows => {
-            AppError::NotFound(format!("Setting '{}' not found", key))
+            AppError::NotFound(format!("Setting '{key}' not found"))
         }
         _ => AppError::Database(e),
     })
@@ -34,11 +34,9 @@ pub fn get_setting(state: State<Arc<AppState>>, key: String) -> Result<Setting> 
 pub fn get_setting_value(state: State<Arc<AppState>>, key: String) -> Result<Option<String>> {
     let conn = state.db.conn();
 
-    let result = conn.query_row(
-        "SELECT value FROM settings WHERE key = ?1",
-        [&key],
-        |row| row.get::<_, String>(0),
-    );
+    let result = conn.query_row("SELECT value FROM settings WHERE key = ?1", [&key], |row| {
+        row.get::<_, String>(0)
+    });
 
     match result {
         Ok(value) => Ok(Some(value)),
@@ -75,7 +73,7 @@ pub fn set_setting(state: State<Arc<AppState>>, key: String, value: String) -> R
             })
         },
     )
-    .map_err(|e| AppError::Database(e))
+    .map_err(AppError::Database)
 }
 
 /// List all settings
@@ -83,9 +81,8 @@ pub fn set_setting(state: State<Arc<AppState>>, key: String, value: String) -> R
 pub fn list_settings(state: State<Arc<AppState>>) -> Result<Vec<Setting>> {
     let conn = state.db.conn();
 
-    let mut stmt = conn.prepare(
-        "SELECT key, value, created_at, updated_at FROM settings ORDER BY key ASC",
-    )?;
+    let mut stmt =
+        conn.prepare("SELECT key, value, created_at, updated_at FROM settings ORDER BY key ASC")?;
 
     let settings = stmt
         .query_map([], |row| {
@@ -109,7 +106,7 @@ pub fn delete_setting(state: State<Arc<AppState>>, key: String) -> Result<()> {
     let rows_affected = conn.execute("DELETE FROM settings WHERE key = ?1", (&key,))?;
 
     if rows_affected == 0 {
-        return Err(AppError::NotFound(format!("Setting '{}' not found", key)));
+        return Err(AppError::NotFound(format!("Setting '{key}' not found")));
     }
 
     Ok(())

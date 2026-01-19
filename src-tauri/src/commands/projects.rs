@@ -92,10 +92,7 @@ pub fn update_project(
     // Check if project exists and is not deleted
     let existing = get_project_by_id(&conn, &id)?;
     if existing.deleted_at.is_some() {
-        return Err(AppError::NotFound(format!(
-            "Project {} is deleted",
-            id
-        )));
+        return Err(AppError::NotFound(format!("Project {id} is deleted")));
     }
 
     if let Some(name) = input.name {
@@ -119,7 +116,7 @@ pub fn delete_project(state: State<Arc<AppState>>, id: String) -> Result<Project
     )?;
 
     if rows_affected == 0 {
-        return Err(AppError::NotFound(format!("Project {} not found", id)));
+        return Err(AppError::NotFound(format!("Project {id} not found")));
     }
 
     get_project_by_id(&conn, &id)
@@ -137,8 +134,7 @@ pub fn restore_project(state: State<Arc<AppState>>, id: String) -> Result<Projec
 
     if rows_affected == 0 {
         return Err(AppError::NotFound(format!(
-            "Deleted project {} not found",
-            id
+            "Deleted project {id} not found"
         )));
     }
 
@@ -153,7 +149,7 @@ pub fn permanently_delete_project(state: State<Arc<AppState>>, id: String) -> Re
     let rows_affected = conn.execute("DELETE FROM projects WHERE id = ?1", (&id,))?;
 
     if rows_affected == 0 {
-        return Err(AppError::NotFound(format!("Project {} not found", id)));
+        return Err(AppError::NotFound(format!("Project {id} not found")));
     }
 
     Ok(())
@@ -179,7 +175,7 @@ fn get_project_by_id(
     )
     .map_err(|e| match e {
         rusqlite::Error::QueryReturnedNoRows => {
-            AppError::NotFound(format!("Project {} not found", id))
+            AppError::NotFound(format!("Project {id} not found"))
         }
         _ => AppError::Database(e),
     })

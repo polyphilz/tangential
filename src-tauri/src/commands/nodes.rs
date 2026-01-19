@@ -121,7 +121,7 @@ pub fn get_node_path(state: State<Arc<AppState>>, node_id: String) -> Result<Vec
         .collect::<std::result::Result<Vec<_>, _>>()?;
 
     if nodes.is_empty() {
-        return Err(AppError::NotFound(format!("Node {} not found", node_id)));
+        return Err(AppError::NotFound(format!("Node {node_id} not found")));
     }
 
     Ok(nodes)
@@ -159,7 +159,7 @@ pub fn update_node(state: State<Arc<AppState>>, id: String, input: UpdateNode) -
     // Check if node exists and is not deleted
     let existing = get_node_by_id(&conn, &id)?;
     if existing.deleted_at.is_some() {
-        return Err(AppError::NotFound(format!("Node {} is deleted", id)));
+        return Err(AppError::NotFound(format!("Node {id} is deleted")));
     }
 
     // Build dynamic update query
@@ -188,7 +188,7 @@ pub fn update_node(state: State<Arc<AppState>>, id: String, input: UpdateNode) -
     }
     if let Some(failed) = input.failed {
         updates.push(format!("failed = ?{}", params.len() + 1));
-        params.push(Box::new(if failed { 1 } else { 0 }));
+        params.push(Box::new(i32::from(failed)));
     }
 
     let query = format!(
@@ -198,7 +198,8 @@ pub fn update_node(state: State<Arc<AppState>>, id: String, input: UpdateNode) -
     );
     params.push(Box::new(id.clone()));
 
-    let params_refs: Vec<&dyn rusqlite::ToSql> = params.iter().map(|p| p.as_ref()).collect();
+    let params_refs: Vec<&dyn rusqlite::ToSql> =
+        params.iter().map(std::convert::AsRef::as_ref).collect();
     conn.execute(&query, params_refs.as_slice())?;
 
     get_node_by_id(&conn, &id)
@@ -215,7 +216,7 @@ pub fn delete_node(state: State<Arc<AppState>>, id: String) -> Result<Node> {
     )?;
 
     if rows_affected == 0 {
-        return Err(AppError::NotFound(format!("Node {} not found", id)));
+        return Err(AppError::NotFound(format!("Node {id} not found")));
     }
 
     get_node_by_id(&conn, &id)
@@ -232,7 +233,7 @@ pub fn restore_node(state: State<Arc<AppState>>, id: String) -> Result<Node> {
     )?;
 
     if rows_affected == 0 {
-        return Err(AppError::NotFound(format!("Deleted node {} not found", id)));
+        return Err(AppError::NotFound(format!("Deleted node {id} not found")));
     }
 
     get_node_by_id(&conn, &id)
@@ -247,7 +248,7 @@ pub fn permanently_delete_node(state: State<Arc<AppState>>, id: String) -> Resul
     let rows_affected = conn.execute("DELETE FROM nodes WHERE id = ?1", (&id,))?;
 
     if rows_affected == 0 {
-        return Err(AppError::NotFound(format!("Node {} not found", id)));
+        return Err(AppError::NotFound(format!("Node {id} not found")));
     }
 
     Ok(())
@@ -283,7 +284,7 @@ fn get_node_by_id(
         map_node,
     )
     .map_err(|e| match e {
-        rusqlite::Error::QueryReturnedNoRows => AppError::NotFound(format!("Node {} not found", id)),
+        rusqlite::Error::QueryReturnedNoRows => AppError::NotFound(format!("Node {id} not found")),
         _ => AppError::Database(e),
     })
 }

@@ -10,6 +10,7 @@ pub enum AppError {
     NotFound(String),
 
     #[error("Invalid input: {0}")]
+    #[allow(dead_code)]
     InvalidInput(String),
 }
 

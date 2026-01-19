@@ -5,8 +5,14 @@ use std::sync::Mutex;
 /// Database migrations - each entry is (name, SQL)
 /// Migrations are applied in order and tracked in the _migrations table
 pub const MIGRATIONS: &[(&str, &str)] = &[
-    ("001_initial_schema", include_str!("migrations/001_initial_schema.sql")),
-    ("002_add_soft_delete_fields", include_str!("migrations/002_add_soft_delete_fields.sql")),
+    (
+        "001_initial_schema",
+        include_str!("migrations/001_initial_schema.sql"),
+    ),
+    (
+        "002_add_soft_delete_fields",
+        include_str!("migrations/002_add_soft_delete_fields.sql"),
+    ),
 ];
 
 pub struct Database {
@@ -51,17 +57,14 @@ impl Database {
         let mut stmt = conn.prepare("SELECT name FROM _migrations")?;
         let applied: Vec<String> = stmt
             .query_map([], |row| row.get(0))?
-            .filter_map(|r| r.ok())
+            .filter_map(std::result::Result::ok)
             .collect();
 
         // Apply pending migrations
-        for (name, sql) in MIGRATIONS.iter() {
-            if !applied.contains(&name.to_string()) {
+        for (name, sql) in MIGRATIONS {
+            if !applied.contains(&(*name).to_string()) {
                 conn.execute_batch(sql)?;
-                conn.execute(
-                    "INSERT INTO _migrations (name) VALUES (?1)",
-                    [name],
-                )?;
+                conn.execute("INSERT INTO _migrations (name) VALUES (?1)", [name])?;
             }
         }
 

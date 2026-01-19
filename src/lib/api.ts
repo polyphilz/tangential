@@ -45,7 +45,8 @@ export const projects = {
 // ============================================================================
 
 export const trees = {
-  create: (input: CreateTree): Promise<Tree> => invoke("create_tree", { input }),
+  create: (input: CreateTree): Promise<Tree> =>
+    invoke("create_tree", { input }),
 
   get: (id: string): Promise<Tree> => invoke("get_tree", { id }),
 
@@ -72,7 +73,8 @@ export const trees = {
 // ============================================================================
 
 export const nodes = {
-  create: (input: CreateNode): Promise<Node> => invoke("create_node", { input }),
+  create: (input: CreateNode): Promise<Node> =>
+    invoke("create_node", { input }),
 
   get: (id: string): Promise<Node> => invoke("get_node", { id }),
 
