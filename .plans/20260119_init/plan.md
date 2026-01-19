@@ -5,7 +5,7 @@
 Tangential is a local-first desktop application for visualizing and managing LLM conversations as branching trees. It solves the problem of context pollution in long research sessions by allowing users to explore multiple tangents from any point in a conversation without losing the original thread.
 
 **Target Platforms:** macOS, Windows, Linux (simultaneous release)
-**Tech Stack:** Tauri 2.0, React, SQLite, React Flow
+**Tech Stack:** Tauri 2.0, React, SQLite, React Flow, Tailwind CSS
 
 ---
 
@@ -233,33 +233,38 @@ Tangential is a local-first desktop application for visualizing and managing LLM
 3. Implement tree data structures and traversal
 4. Set up IPC between frontend and backend
 
-### Phase 3: Canvas & Visualization
+### Phase 3: Frontend Tooling
+1. Configure ESLint + Prettier for TypeScript/React
+2. Set up Tailwind CSS with Vite
+3. Configure rustfmt + clippy for Rust code
+
+### Phase 4: Canvas & Visualization
 1. Integrate React Flow
 2. Implement node components with summary display
 3. Build tree layout algorithm (vertical flow)
 4. Add zoom/pan controls
 5. Implement path highlighting system
 
-### Phase 4: Conversation UI
+### Phase 5: Conversation UI
 1. Build right sheet component
 2. Implement rich content rendering (markdown, code, LaTeX)
 3. Create input area with /branch command
 4. Build streaming display with node animation
 
-### Phase 5: LLM Integration
+### Phase 6: LLM Integration
 1. Implement provider abstraction layer
 2. Add OpenAI, Anthropic, Google, xAI clients
 3. Build streaming response handling
 4. Implement auto-summarization pipeline
 5. Add error handling and retry logic
 
-### Phase 6: Search & Navigation
+### Phase 7: Search & Navigation
 1. Implement full-text search with SQLite FTS5
 2. Add sqlite-vec for semantic search
 3. Build Cmd+K command palette
 4. Implement keyboard navigation
 
-### Phase 7: Polish & Platform
+### Phase 8: Polish & Platform
 1. Implement OS keychain integration
 2. Add settings UI
 3. Build onboarding flow (API key setup)
