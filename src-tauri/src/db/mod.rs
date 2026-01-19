@@ -1,10 +1,13 @@
-mod schema;
-
 use rusqlite::{Connection, Result};
 use std::path::PathBuf;
 use std::sync::Mutex;
 
-pub use schema::MIGRATIONS;
+/// Database migrations - each entry is (name, SQL)
+/// Migrations are applied in order and tracked in the _migrations table
+pub const MIGRATIONS: &[(&str, &str)] = &[
+    ("001_initial_schema", include_str!("migrations/001_initial_schema.sql")),
+    ("002_add_soft_delete_fields", include_str!("migrations/002_add_soft_delete_fields.sql")),
+];
 
 pub struct Database {
     conn: Mutex<Connection>,

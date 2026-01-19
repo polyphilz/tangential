@@ -1,4 +1,7 @@
+mod commands;
 mod db;
+mod error;
+mod models;
 
 use db::Database;
 use std::sync::Arc;
@@ -12,11 +15,6 @@ use tauri::{
 /// Application state shared across commands
 pub struct AppState {
     pub db: Database,
-}
-
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
 fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
@@ -82,7 +80,45 @@ pub fn run() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![
+            // Projects
+            commands::create_project,
+            commands::get_project,
+            commands::list_projects,
+            commands::list_deleted_projects,
+            commands::update_project,
+            commands::delete_project,
+            commands::restore_project,
+            commands::permanently_delete_project,
+            // Trees
+            commands::create_tree,
+            commands::get_tree,
+            commands::list_trees,
+            commands::list_staging_trees,
+            commands::list_deleted_trees,
+            commands::update_tree,
+            commands::delete_tree,
+            commands::restore_tree,
+            commands::permanently_delete_tree,
+            // Nodes
+            commands::create_node,
+            commands::get_node,
+            commands::list_nodes,
+            commands::get_root_nodes,
+            commands::get_child_nodes,
+            commands::get_node_path,
+            commands::get_leaf_nodes,
+            commands::update_node,
+            commands::delete_node,
+            commands::restore_node,
+            commands::permanently_delete_node,
+            // Settings
+            commands::get_setting,
+            commands::get_setting_value,
+            commands::set_setting,
+            commands::list_settings,
+            commands::delete_setting,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

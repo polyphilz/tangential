@@ -233,7 +233,7 @@ Tangential is a local-first desktop application for visualizing and managing LLM
 3. Implement tree data structures and traversal
 4. Set up IPC between frontend and backend
 
-### Phase 3: Frontend Tooling
+### Phase 3: Tooling
 1. Configure ESLint + Prettier for TypeScript/React
 2. Set up Tailwind CSS with Vite
 3. Configure rustfmt + clippy for Rust code
