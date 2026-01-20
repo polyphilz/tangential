@@ -248,8 +248,7 @@ Tangential is a local-first desktop application for visualizing and managing LLM
 ### Phase 5: Conversation UI
 1. Build right sheet component
 2. Implement rich content rendering (markdown, code, LaTeX)
-3. Create input area with /branch command
-4. Build streaming display with node animation
+3. Build streaming display with node animation
 
 ### Phase 6: LLM Integration
 1. Implement provider abstraction layer
@@ -257,6 +256,14 @@ Tangential is a local-first desktop application for visualizing and managing LLM
 3. Build streaming response handling
 4. Implement auto-summarization pipeline
 5. Add error handling and retry logic
+6. **Node creation flow when sending a message:**
+   - Create new node in database (user_content, parent_id, model)
+   - Add node to canvas tree visualization immediately
+   - Auto-select the new node
+   - Show "generating" animation on canvas node (pulsing/squiggly border)
+   - Stream assistant response into the node's assistant_content
+   - Update node with final data (tokens, summary) on completion
+   - Handle errors gracefully (show failed state on node)
 
 ### Phase 7: Search & Navigation
 1. Implement full-text search with SQLite FTS5

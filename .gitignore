@@ -34,3 +34,6 @@ src-tauri/target/
 
 # pnpm build scripts config
 .pnpm-build-scripts.json
+
+# Playwright MCP test artifacts
+.playwright-mcp/
