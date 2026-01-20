@@ -20,8 +20,7 @@ import type {
 // ============================================================================
 
 export const projects = {
-  create: (input: CreateProject): Promise<Project> =>
-    invoke("create_project", { input }),
+  create: (input: CreateProject): Promise<Project> => invoke("create_project", { input }),
 
   get: (id: string): Promise<Project> => invoke("get_project", { id }),
 
@@ -36,8 +35,7 @@ export const projects = {
 
   restore: (id: string): Promise<Project> => invoke("restore_project", { id }),
 
-  permanentlyDelete: (id: string): Promise<void> =>
-    invoke("permanently_delete_project", { id }),
+  permanentlyDelete: (id: string): Promise<void> => invoke("permanently_delete_project", { id }),
 };
 
 // ============================================================================
@@ -45,27 +43,23 @@ export const projects = {
 // ============================================================================
 
 export const trees = {
-  create: (input: CreateTree): Promise<Tree> =>
-    invoke("create_tree", { input }),
+  create: (input: CreateTree): Promise<Tree> => invoke("create_tree", { input }),
 
   get: (id: string): Promise<Tree> => invoke("get_tree", { id }),
 
-  list: (projectId?: string): Promise<Tree[]> =>
-    invoke("list_trees", { projectId }),
+  list: (projectId?: string): Promise<Tree[]> => invoke("list_trees", { projectId }),
 
   listStaging: (): Promise<Tree[]> => invoke("list_staging_trees"),
 
   listDeleted: (): Promise<Tree[]> => invoke("list_deleted_trees"),
 
-  update: (id: string, input: UpdateTree): Promise<Tree> =>
-    invoke("update_tree", { id, input }),
+  update: (id: string, input: UpdateTree): Promise<Tree> => invoke("update_tree", { id, input }),
 
   delete: (id: string): Promise<Tree> => invoke("delete_tree", { id }),
 
   restore: (id: string): Promise<Tree> => invoke("restore_tree", { id }),
 
-  permanentlyDelete: (id: string): Promise<void> =>
-    invoke("permanently_delete_tree", { id }),
+  permanentlyDelete: (id: string): Promise<void> => invoke("permanently_delete_tree", { id }),
 };
 
 // ============================================================================
@@ -73,34 +67,27 @@ export const trees = {
 // ============================================================================
 
 export const nodes = {
-  create: (input: CreateNode): Promise<Node> =>
-    invoke("create_node", { input }),
+  create: (input: CreateNode): Promise<Node> => invoke("create_node", { input }),
 
   get: (id: string): Promise<Node> => invoke("get_node", { id }),
 
   list: (treeId: string): Promise<Node[]> => invoke("list_nodes", { treeId }),
 
-  getRoots: (treeId: string): Promise<Node[]> =>
-    invoke("get_root_nodes", { treeId }),
+  getRoots: (treeId: string): Promise<Node[]> => invoke("get_root_nodes", { treeId }),
 
-  getChildren: (parentId: string): Promise<Node[]> =>
-    invoke("get_child_nodes", { parentId }),
+  getChildren: (parentId: string): Promise<Node[]> => invoke("get_child_nodes", { parentId }),
 
-  getPath: (nodeId: string): Promise<Node[]> =>
-    invoke("get_node_path", { nodeId }),
+  getPath: (nodeId: string): Promise<Node[]> => invoke("get_node_path", { nodeId }),
 
-  getLeaves: (treeId: string): Promise<Node[]> =>
-    invoke("get_leaf_nodes", { treeId }),
+  getLeaves: (treeId: string): Promise<Node[]> => invoke("get_leaf_nodes", { treeId }),
 
-  update: (id: string, input: UpdateNode): Promise<Node> =>
-    invoke("update_node", { id, input }),
+  update: (id: string, input: UpdateNode): Promise<Node> => invoke("update_node", { id, input }),
 
   delete: (id: string): Promise<Node> => invoke("delete_node", { id }),
 
   restore: (id: string): Promise<Node> => invoke("restore_node", { id }),
 
-  permanentlyDelete: (id: string): Promise<void> =>
-    invoke("permanently_delete_node", { id }),
+  permanentlyDelete: (id: string): Promise<void> => invoke("permanently_delete_node", { id }),
 };
 
 // ============================================================================
@@ -110,11 +97,9 @@ export const nodes = {
 export const settings = {
   get: (key: string): Promise<Setting> => invoke("get_setting", { key }),
 
-  getValue: (key: string): Promise<string | null> =>
-    invoke("get_setting_value", { key }),
+  getValue: (key: string): Promise<string | null> => invoke("get_setting_value", { key }),
 
-  set: (key: string, value: string): Promise<Setting> =>
-    invoke("set_setting", { key, value }),
+  set: (key: string, value: string): Promise<Setting> => invoke("set_setting", { key, value }),
 
   list: (): Promise<Setting[]> => invoke("list_settings"),
 

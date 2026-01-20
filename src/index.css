@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+/* ReactFlow node highlighting via CSS - bypasses React memoization issues */
+.react-flow__node.node-highlighted-selected > div,
+.react-flow__node.node-highlighted-unselected > div {
+  border-color: #fbbf24 !important; /* amber-400 */
+  box-shadow: 0 0 0 2px #fbbf24 !important; /* ring-2 ring-amber-400 */
+}
+
+.react-flow__node.node-normal-selected > div {
+  border-color: #3b82f6 !important; /* blue-500 */
+  box-shadow: 0 0 0 2px #3b82f6 !important; /* ring-2 ring-blue-500 */
+}
