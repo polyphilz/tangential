@@ -37,3 +37,6 @@ src-tauri/target/
 
 # Playwright MCP test artifacts
 .playwright-mcp/
+
+# Plans
+.plans/
